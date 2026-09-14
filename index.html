@@ -1159,8 +1159,11 @@
 
   function setLanguage(language) {
     originalTexts.forEach(({ raw, key }, node) => {
-      const value = language === 'en' ? (translations[key] || key) : key;
-      node.nodeValue = raw.replace(key, value);
+      let value = raw;
+      Object.entries(translations).forEach(([italian, english]) => {
+        value = value.replaceAll(language === 'en' ? italian : english, language === 'en' ? english : italian);
+      });
+      node.nodeValue = value;
     });
     document.documentElement.lang = language;
     document.title = language === 'en' ? 'Doppio Malto - Partner Offer' : 'Doppio Malto — Convenzione Partner';
